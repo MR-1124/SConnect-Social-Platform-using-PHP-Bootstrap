@@ -140,16 +140,19 @@ social_app/
 
 ---
 
-## **Notes**
+## **Screenshots**
 
-* The `uploads/` directory **must be writable** for profile picture uploads to work.
-* Only the following sidebar items are fully functional:
+![Login](screenshots/1.png)
 
-  * **Profile Picture**
-  * **Friends**
-  * **Logout**
-* All other menu items are **placeholders** for future development.
-* Make sure the MySQL server is running and the credentials in `config.php` are correct.
+![Register](screenshots/2.png)
+
+![Dashboard](screenshots/3.png)
+
+![Dashboard](screenshots/4.png)
+
+![DB](screenshots/5.png)
+
+![DB](screenshots/6.png)
 
 ---
 
