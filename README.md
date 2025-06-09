@@ -156,26 +156,6 @@ social_app/
 
 ---
 
-## **Troubleshooting**
-
-| Issue                            | Solution                                                               |
-| -------------------------------- | ---------------------------------------------------------------------- |
-| **Database Connection Error**    | Check `config.php` for correct credentials and ensure MySQL is active. |
-| **Profile Picture Upload Fails** | Make sure `uploads/` folder exists and has appropriate permissions.    |
-| **Friend Search Not Working**    | Verify that database tables are correctly created and populated.       |
-
----
-
-## **Future Improvements**
-
-* Implement remaining sidebar features (e.g., Messages, Notifications).
-* Make the app fully responsive for mobile devices.
-* Enhance security:
-
-  * Add **CSRF protection**
-  * Sanitize all user inputs
-
----
 
 ## **Author**
 >Mayan Roy
