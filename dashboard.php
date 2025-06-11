@@ -8,18 +8,19 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
+// Fetch user data
 $stmt = $conn->prepare("SELECT name, profile_pic FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 
-
+// Handle profile picture upload
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profile_pic'])) {
     $target_dir = "uploads/";
     $old_pic = $user['profile_pic'];
     
     if ($old_pic != 'default.jpg' && file_exists($target_dir . $old_pic)) {
-        unlink($target_dir . $old_pic); 
+        unlink($target_dir . $old_pic); // Remove old profile picture
     }
     
     $target_file = $target_dir . basename($_FILES["profile_pic"]["name"]);
@@ -32,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profile_pic'])) {
     }
 }
 
-
+// Handle friend search
 $search_results = [];
 if (isset($_POST['search'])) {
     $search = $_POST['search'];
@@ -43,24 +44,7 @@ if (isset($_POST['search'])) {
     $search_results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-
-if (isset($_POST['send_request'])) {
-    $receiver_id = $_POST['receiver_id'];
-    $stmt = $conn->prepare("INSERT INTO friend_requests (sender_id, receiver_id) VALUES (?, ?)");
-    $stmt->bind_param("ii", $user_id, $receiver_id);
-    $stmt->execute();
-}
-
-
-if (isset($_POST['action']) && isset($_POST['request_id'])) {
-    $request_id = $_POST['request_id'];
-    $action = $_POST['action'];
-    $stmt = $conn->prepare("UPDATE friend_requests SET status = ? WHERE id = ?");
-    $stmt->bind_param("si", $action, $request_id);
-    $stmt->execute();
-}
-
-
+// Fetch pending friend requests
 $stmt = $conn->prepare("SELECT fr.id, u.name FROM friend_requests fr JOIN users u ON fr.sender_id = u.id WHERE fr.receiver_id = ? AND fr.status = 'pending'");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -73,11 +57,87 @@ $friend_requests = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     <meta charset="UTF-8">
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         .sidebar { width: 250px; height: 100vh; position: fixed; background: #f8f9fa; }
         .content { margin-left: 270px; padding: 20px; }
         .profile-pic { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; }
     </style>
+    <script>
+        $(document).ready(function() {
+            // Send friend request
+            $('.send-request').click(function(e) {
+                e.preventDefault();
+                var receiver_id = $(this).data('receiver-id');
+                var button = $(this);
+                
+                $.ajax({
+                    url: 'friend_actions.php',
+                    type: 'POST',
+                    data: { action: 'send_request', receiver_id: receiver_id },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            button.replaceWith('<span class="text-muted">Request Sent</span>');
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error processing request.');
+                    }
+                });
+            });
+
+            // Accept friend request
+            $('.accept-request').click(function(e) {
+                e.preventDefault();
+                var request_id = $(this).data('request-id');
+                var li = $(this).closest('li');
+                
+                $.ajax({
+                    url: 'friend_actions.php',
+                    type: 'POST',
+                    data: { action: 'accept_request', request_id: request_id },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            li.replaceWith('<li class="list-group-item text-success">Friend request accepted.</li>');
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error processing request.');
+                    }
+                });
+            });
+
+            // Block friend request
+            $('.block-request').click(function(e) {
+                e.preventDefault();
+                var request_id = $(this).data('request-id');
+                var li = $(this).closest('li');
+                
+                $.ajax({
+                    url: 'friend_actions.php',
+                    type: 'POST',
+                    data: { action: 'block_request', request_id: request_id },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            li.remove();
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error processing request.');
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="sidebar">
@@ -99,7 +159,7 @@ $friend_requests = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     <div class="content">
         <h2>Dashboard</h2>
         
-
+        <!-- Profile Picture Update -->
         <h3>Update Profile Picture</h3>
         <form method="POST" enctype="multipart/form-data">
             <div class="mb-3">
@@ -109,7 +169,7 @@ $friend_requests = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             <button type="submit" class="btn btn-primary">Update Picture</button>
         </form>
         
-
+        <!-- Friend Search -->
         <h3 class="mt-5">Search Friends</h3>
         <form method="POST" class="mb-3">
             <div class="input-group">
@@ -123,27 +183,32 @@ $friend_requests = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                 <?php foreach ($search_results as $result): ?>
                     <li class="list-group-item">
                         <?php echo $result['name'] . " (" . $result['email'] . ")"; ?>
-                        <form method="POST" class="d-inline">
-                            <input type="hidden" name="receiver_id" value="<?php echo $result['id']; ?>">
-                            <button type="submit" name="send_request" class="btn btn-sm btn-success">Send Request</button>
-                        </form>
+                        <?php
+                        // Check if a request is already sent
+                        $stmt = $conn->prepare("SELECT status FROM friend_requests WHERE sender_id = ? AND receiver_id = ?");
+                        $stmt->bind_param("ii", $user_id, $result['id']);
+                        $stmt->execute();
+                        $request = $stmt->get_result()->fetch_assoc();
+                        if ($request && $request['status'] == 'pending') {
+                            echo '<span class="text-muted">Request Sent</span>';
+                        } elseif (!$request) {
+                            echo '<button class="btn btn-sm btn-success send-request" data-receiver-id="' . $result['id'] . '">Send Request</button>';
+                        }
+                        ?>
                     </li>
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>
         
- 
+        <!-- Friend Requests -->
         <h3 class="mt-5">Friend Requests</h3>
         <?php if (!empty($friend_requests)): ?>
-            <ul class="list-group">
+            <ul class="list-group" id="friend-requests">
                 <?php foreach ($friend_requests as $request): ?>
                     <li class="list-group-item">
                         <?php echo $request['name']; ?>
-                        <form method="POST" class="d-inline">
-                            <input type="hidden" name="request_id" value="<?php echo $request['id']; ?>">
-                            <button type="submit" name="action" value="accepted" class="btn btn-sm btn-success">Accept</button>
-                            <button type="submit" name="action" value="blocked" class="btn btn-sm btn-danger">Block</button>
-                        </form>
+                        <button class="btn btn-sm btn-success accept-request" data-request-id="<?php echo $request['id']; ?>">Accept</button>
+                        <button class="btn btn-sm btn-danger block-request" data-request-id="<?php echo $request['id']; ?>">Block</button>
                     </li>
                 <?php endforeach; ?>
             </ul>
