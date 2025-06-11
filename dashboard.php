@@ -8,19 +8,19 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Fetch user data
+
 $stmt = $conn->prepare("SELECT name, profile_pic FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 
-// Handle profile picture upload
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profile_pic'])) {
     $target_dir = "uploads/";
     $old_pic = $user['profile_pic'];
     
     if ($old_pic != 'default.jpg' && file_exists($target_dir . $old_pic)) {
-        unlink($target_dir . $old_pic); // Remove old profile picture
+        unlink($target_dir . $old_pic); // Remove old profile picture using ulink
     }
     
     $target_file = $target_dir . basename($_FILES["profile_pic"]["name"]);
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profile_pic'])) {
     }
 }
 
-// Handle friend search
+// friend search implementation also added 
 $search_results = [];
 if (isset($_POST['search'])) {
     $search = $_POST['search'];
@@ -44,7 +44,7 @@ if (isset($_POST['search'])) {
     $search_results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-// Fetch pending friend requests
+
 $stmt = $conn->prepare("SELECT fr.id, u.name FROM friend_requests fr JOIN users u ON fr.sender_id = u.id WHERE fr.receiver_id = ? AND fr.status = 'pending'");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -64,8 +64,12 @@ $friend_requests = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         .profile-pic { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; }
     </style>
     <script>
+
+// implemneted friend request system using ajax
+
+        
         $(document).ready(function() {
-            // Send friend request
+
             $('.send-request').click(function(e) {
                 e.preventDefault();
                 var receiver_id = $(this).data('receiver-id');
@@ -89,7 +93,7 @@ $friend_requests = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                 });
             });
 
-            // Accept friend request
+
             $('.accept-request').click(function(e) {
                 e.preventDefault();
                 var request_id = $(this).data('request-id');
@@ -113,7 +117,7 @@ $friend_requests = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                 });
             });
 
-            // Block friend request
+
             $('.block-request').click(function(e) {
                 e.preventDefault();
                 var request_id = $(this).data('request-id');
@@ -159,7 +163,7 @@ $friend_requests = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     <div class="content">
         <h2>Dashboard</h2>
         
-        <!-- Profile Picture Update -->
+
         <h3>Update Profile Picture</h3>
         <form method="POST" enctype="multipart/form-data">
             <div class="mb-3">
@@ -169,7 +173,7 @@ $friend_requests = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             <button type="submit" class="btn btn-primary">Update Picture</button>
         </form>
         
-        <!-- Friend Search -->
+
         <h3 class="mt-5">Search Friends</h3>
         <form method="POST" class="mb-3">
             <div class="input-group">
@@ -184,7 +188,8 @@ $friend_requests = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                     <li class="list-group-item">
                         <?php echo $result['name'] . " (" . $result['email'] . ")"; ?>
                         <?php
-                        // Check if a request is already sent
+
+    
                         $stmt = $conn->prepare("SELECT status FROM friend_requests WHERE sender_id = ? AND receiver_id = ?");
                         $stmt->bind_param("ii", $user_id, $result['id']);
                         $stmt->execute();
@@ -200,7 +205,7 @@ $friend_requests = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             </ul>
         <?php endif; ?>
         
-        <!-- Friend Requests -->
+     
         <h3 class="mt-5">Friend Requests</h3>
         <?php if (!empty($friend_requests)): ?>
             <ul class="list-group" id="friend-requests">
