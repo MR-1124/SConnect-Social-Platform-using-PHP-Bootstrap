@@ -133,7 +133,7 @@ Social Platform/
 1. **Clone Repository**
 
    ```bash
-   git clone https://github.com/MR-1124/PHP-ASSIGNMENT.git
+   git clone https://github.com/MR-1124/SConnect-Social-Platform-using-PHP-Bootstrap
    cd PHP-ASSIGNMENT
    ```
 
@@ -163,7 +163,7 @@ Social Platform/
 
 5. **Run the App**
 
-   * Open: `http://localhost/PHP-ASSIGNMENT/login.php`
+   * Open: `http://localhost/SConnect-Social-Platform-using-PHP-Bootstrap/login.php`
 
 ---
 
@@ -221,7 +221,7 @@ Please follow project conventions (Bootstrap classes, PHP standards) and test yo
 ## 👤 Author
 
 **Mayan Roy**\
-[LinkedIn](https://www.linkedin.com/in/mayan-roy-/)
+[LinkedIn](https://www.linkedin.com/in/mayan-roy/)
 
 ---
 
