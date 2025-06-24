@@ -88,6 +88,36 @@ A modern social networking platform built using **PHP**, **MySQL**, **Bootstrap 
 
 ---
 
+### 🖥️ Screenshots
+
+#### 1. Dashboard
+
+![Dashboard](screenshots/1.png)
+
+![Dashboard](screenshots/2.png)
+
+#### 2. Profile
+
+![Profile](screenshots/3.png)
+
+#### 3. Friends
+
+![Friends](screenshots/4.png)
+
+#### 4. Messages
+
+![Messages](screenshots/5.png)
+
+#### 5. Group Chat
+
+![Group Chat](screenshots/6.png)
+
+#### 6. Public Posts
+
+![Posts](screenshots/7.png)
+
+---
+
 ## 📁 Project Structure
 
 ```
