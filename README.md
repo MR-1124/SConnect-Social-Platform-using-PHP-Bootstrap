@@ -1,5 +1,5 @@
 
-# Social App
+# SConnect - Social Platform using PHP, Bootstrap
 
 A modern social networking platform built using **PHP**, **MySQL**, **Bootstrap 5.3**, **jQuery**, **Font Awesome**, and custom CSS. This responsive web app allows users to register, log in, manage their profiles, connect with friends, chat one-on-one or in groups, share public posts, and receive notifications—all with a sleek UI featuring smooth animations, gradient backgrounds, and bold typography.
 
