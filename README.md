@@ -1,5 +1,5 @@
 
-# SConnect - Social Platform using PHP, Bootstrap
+# Social Platform using PHP, Bootstrap
 
 A modern social networking platform built using **PHP**, **MySQL**, **Bootstrap 5.3**, **jQuery**, **Font Awesome**, and custom CSS. This responsive web app allows users to register, log in, manage their profiles, connect with friends, chat one-on-one or in groups, share public posts, and receive notifications—all with a sleek UI featuring smooth animations, gradient backgrounds, and bold typography.
 
@@ -163,8 +163,8 @@ Social Platform/
 1. **Clone Repository**
 
    ```bash
-   git clone https://github.com/MR-1124/SConnect-Social-Platform-using-PHP-Bootstrap
-   cd PHP-ASSIGNMENT
+   git clone https://github.com/MR-1124/Social-Platform-using-PHP-Bootstrap
+   cd Social Platform
    ```
 
 2. **Set Up Local Server**
@@ -193,7 +193,7 @@ Social Platform/
 
 5. **Run the App**
 
-   * Open: `http://localhost/SConnect-Social-Platform-using-PHP-Bootstrap/login.php`
+   * Open: `http://localhost/Social-Platform-using-PHP-Bootstrap/login.php`
 
 ---
 
@@ -252,6 +252,7 @@ Please follow project conventions (Bootstrap classes, PHP standards) and test yo
 
 **Mayan Roy**\
 [LinkedIn](https://www.linkedin.com/in/mayan-roy/)
+[GitHub](https://github.com/MR-1124/)
 
 ---
 
