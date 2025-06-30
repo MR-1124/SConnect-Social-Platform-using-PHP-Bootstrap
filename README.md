@@ -118,30 +118,6 @@ A modern social networking platform built using **PHP**, **MySQL**, **Bootstrap 
 
 ---
 
-## 📁 Project Structure
-
-```
-Social Platform/
-├── css/styles.css
-├── uploads/              # Profile pictures (needs default.jpg)
-├── config.php            # DB credentials
-├── db.sql                # Tables and schema
-├── login.php
-├── register.php
-├── dashboard.php
-├── friends.php
-├── friend_actions.php
-├── chat.php 
-├── group_chat.php
-├── group_actions.php
-├── posts.php
-├── profile.php
-├── notifications.php
-├── logout.php
-└── README.md
-```
-
----
 
 ## ⚙️ Prerequisites
 
@@ -236,15 +212,6 @@ Please follow project conventions (Bootstrap classes, PHP standards) and test yo
 * **Security** is not a priority here.
 * Like counts are **static placeholders** and are currently randomized numbers.
 * Sidebar toggle for mobile is recommended as an enhancement(will be updated).
-
----
-
-## 🚀 Future Improvements
-
-* Mobile sidebar toggle menu (will update soon)
-* Full like/dislike system for posts
-* Forgot password functionality
-* Improved security: input sanitization, secure file uploads
 
 ---
 
