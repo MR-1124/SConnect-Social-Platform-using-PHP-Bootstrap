@@ -181,7 +181,7 @@ A modern social networking platform built using **PHP**, **MySQL**, **Bootstrap 
 * **Log In:**
   Login via `login.php`. After 3 failed attempts, account is locked for 30 mins.
 
-* **Explore Features:**
+* **Included Features:**
 
   * **Dashboard:** Posts feed, sidebar navigation
   * **Profile:** Edit profile picture/details
